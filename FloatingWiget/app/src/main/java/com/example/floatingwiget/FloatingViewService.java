@@ -27,6 +27,8 @@ public class FloatingViewService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        android.os.Debug.waitForDebugger();
         //Inflate the floating view layout we created
         mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
 
@@ -47,7 +49,7 @@ public class FloatingViewService extends Service {
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mFloatingView, params);
 
-/*        //The root element of the collapsed view layout
+        //The root element of the collapsed view layout
         final View collapsedView = mFloatingView.findViewById(R.id.collapse_view);
         //The root element of the expanded view layout
         final View expandedView = mFloatingView.findViewById(R.id.expanded_container);
@@ -114,16 +116,8 @@ public class FloatingViewService extends Service {
                 //close the service and remove view from the view hierarchy
                 stopSelf();
             }
-        });*/
+        });
 
-        //Set the close button
-//        ImageView closeButton = (ImageView) mFloatingView.findViewById(R.id.collapsed_iv);
-//        closeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(FloatingViewService.this,"Hello", Toast.LENGTH_LONG);
-//            }
-//        });
         //Drag and move floating view using user's touch action.
         mFloatingView.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
             private int initialX;
@@ -150,15 +144,15 @@ public class FloatingViewService extends Service {
 
                         //The check for Xdiff <10 && YDiff< 10 because sometime elements moves a little while clicking.
                         //So that is click event.
-//                        if (Xdiff < 10 && Ydiff < 10) {
-//                            if (isViewCollapsed()) {
-//                                //When user clicks on the image view of the collapsed layout,
-//                                //visibility of the collapsed layout will be changed to "View.GONE"
-//                                //and expanded view will become visible.
-//                                collapsedView.setVisibility(View.GONE);
-//                                expandedView.setVisibility(View.VISIBLE);
-//                            }
-//                        }
+                        if (Xdiff < 10 && Ydiff < 10) {
+                            if (isViewCollapsed()) {
+                                //When user clicks on the image view of the collapsed layout,
+                                //visibility of the collapsed layout will be changed to "View.GONE"
+                                //and expanded view will become visible.
+                                collapsedView.setVisibility(View.GONE);
+                                expandedView.setVisibility(View.VISIBLE);
+                            }
+                        }
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         //Calculate the X and Y coordinates of the view.
@@ -179,9 +173,9 @@ public class FloatingViewService extends Service {
      *
      * @return true if the floating view is collapsed.
      */
-//    private boolean isViewCollapsed() {
-//        return mFloatingView == null || mFloatingView.findViewById(R.id.collapse_view).getVisibility() == View.VISIBLE;
-//    }
+    private boolean isViewCollapsed() {
+        return mFloatingView == null || mFloatingView.findViewById(R.id.collapse_view).getVisibility() == View.VISIBLE;
+    }
 
     @Override
     public void onDestroy() {

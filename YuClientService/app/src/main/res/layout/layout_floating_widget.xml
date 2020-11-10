@@ -8,15 +8,18 @@
     <!--Root container-->
     <RelativeLayout
         android:id="@+id/root_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="UselessParent">
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:background="@color/cardview_light_background"
+        tools:ignore="UselessParent"
+        >
         <ImageView
             android:id="@+id/btnPlay"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_play"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription"
+            android:layout_alignParentTop="true"/>
 
     </RelativeLayout>
 </FrameLayout>

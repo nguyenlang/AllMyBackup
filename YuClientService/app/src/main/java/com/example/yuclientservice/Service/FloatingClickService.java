@@ -94,16 +94,16 @@ public class FloatingClickService extends Service {
         });
 
         //Run button
-//        mFloatingView.findViewById(R.id.btnPlay).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //Open youtube view
-//                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setData(Uri.parse("https://www.youtube.com/watch?v=VWLGzTS2goo"));
-//                intent.setPackage("com.google.android.youtube");
-//                startActivity(intent);
-//            }
-//        });
+        mFloatingView.findViewById(R.id.btnPlay).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Open youtube view
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://www.youtube.com/watch?v=VWLGzTS2goo"));
+                intent.setPackage("com.google.android.youtube");
+                startActivity(intent);
+            }
+        });
 
     }
 
