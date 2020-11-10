@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TestService</string>
+    <string name="start">Start</string>
+    <string name="setting">Setting</string>
+    <string name="stop">Stop</string>
+    <string name="cap">Capture</string>
+    <string name="drag">Drag me</string>
+</resources>
