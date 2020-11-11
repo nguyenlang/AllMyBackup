@@ -17,10 +17,6 @@
             android:enabled="true"
             android:exported="true"></service>
 
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/config" />
-
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +27,7 @@
 
         <service
             android:name=".Service.AutoClickService"
-            android:label="auto click service"
+            android:label="@string/accessibility_service_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

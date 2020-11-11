@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,14 +17,21 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.yuclientservice.MyApplication;
 import com.example.yuclientservice.R;
 import com.example.yuclientservice.Utils.Extentions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
 public class FloatingClickService extends Service {
     private WindowManager mWindowManager;
     private View mFloatingView;
+    private AutoClickService mAutoClickService = null;
+    private List<Point> listPoint = new ArrayList<Point>();
+    private Timer timer = null;
+    private boolean isRepeate = false;
 
     public FloatingClickService() {
     }
@@ -38,12 +46,15 @@ public class FloatingClickService extends Service {
         super.onCreate();
         //Inflate the floating view layout we created
         mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
-
+        mAutoClickService = ((MyApplication)this.getApplication()).getClickService();
         //Add the view to the window.
+        int overlayParam = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)?
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_PHONE;
+
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PHONE,
+                overlayParam,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
@@ -102,14 +113,53 @@ public class FloatingClickService extends Service {
                 intent.setData(Uri.parse("https://www.youtube.com/watch?v=VWLGzTS2goo"));
                 intent.setPackage("com.google.android.youtube");
                 startActivity(intent);
+
+                if(listPoint.size() > 0) {
+                    for(Point point : listPoint)
+                    {
+                        delayToClick(point, 30000);
+                    }
+                }
             }
         });
 
+        //Button record
+        mFloatingView.findViewById(R.id.btnRecord).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int location[] = new int[2];
+                mFloatingView.getLocationOnScreen(location);
+                Point point = new Point(location[0], location[1]);
+                Toast.makeText(FloatingClickService.this,"x: " + point.x + "--y: " + point.y,Toast.LENGTH_SHORT).show();
+                listPoint.add(point);
+            }
+        });
+
+        //Button clear
+//        mFloatingView.findViewById(R.id.btcClear).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                listPoint.clear();
+//                Toast.makeText(FloatingClickService.this,"Clear record ",Toast.LENGTH_LONG).show();
+//            }
+//        });
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (mFloatingView != null) mWindowManager.removeView(mFloatingView);
+    }
+
+    private void delayToClick(Point point, long delayTime)
+    {
+
+        Handler handler1 = new Handler();
+        handler1.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAutoClickService.click(point.x, point.y);
+            }
+        },delayTime);
     }
 }

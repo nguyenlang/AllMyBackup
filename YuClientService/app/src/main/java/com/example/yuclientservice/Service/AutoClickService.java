@@ -1,9 +1,13 @@
 package com.example.yuclientservice.Service;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.GestureDescription;
 import android.content.Intent;
+import android.graphics.Path;
+import android.os.Build;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 import com.example.yuclientservice.Activity.MainActivity;
 import com.example.yuclientservice.MyApplication;
@@ -31,8 +35,22 @@ public class AutoClickService extends AccessibilityService {
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
-        Log.d(TAG, "onServiceConnected:");
-        //((MyApplication)this.getApplication()).setClickService(this);
-        //startActivity(new Intent(this, MainActivity.class));
+
+        Toast.makeText(this, "Connect accessibility service", Toast.LENGTH_LONG).show();
+        ((MyApplication)this.getApplication()).setClickService(this);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void click(int x, int y){
+        Toast.makeText(this, "click: " + x +"--" + y, Toast.LENGTH_SHORT).show();
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
+        Path path =new Path();
+        path.moveTo(x, y);
+        GestureDescription.Builder builder = new GestureDescription.Builder();
+        GestureDescription gestureDescription = builder.addStroke(new GestureDescription.StrokeDescription(path,10,10)).build();
+        dispatchGesture(gestureDescription, null, null);
     }
 }

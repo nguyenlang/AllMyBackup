@@ -28,7 +28,7 @@ public class FloatingViewService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        android.os.Debug.waitForDebugger();
+        //android.os.Debug.waitForDebugger();
         //Inflate the floating view layout we created
         mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
 
