@@ -23,6 +23,7 @@ import com.example.yuclientservice.Service.AutoClickService;
 import com.example.yuclientservice.Service.FloatingClickService;
 
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         //Check if the application has draw over other apps permission or not?
         //This permission is by default available for API<23. But for API > 23
         //you have to ask for the permission in runtime.
+
         findViewById(R.id.btnStartService).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "onClick: start service on android lower N");
                     mServiceIntent = new Intent(MainActivity.this, FloatingClickService.class);
                     startService(mServiceIntent);
-                    moveTaskToBack(true);
+                    finish();
+                    //moveTaskToBack(true);
                 }else {
                     askPermission();
                     Toast.makeText(MainActivity.this, "You need System Alert Window Permission to do this", Toast.LENGTH_LONG).show();
@@ -90,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
                     mServiceIntent = new Intent(this, FloatingClickService.class);
                 }
                 startActivity(mServiceIntent);
-                moveTaskToBack(true);
+                finish();
+                //moveTaskToBack(true);
             } else { //Permission is not available
                 Toast.makeText(this,
                         "Draw over other app permission not available. Closing the application",
@@ -125,11 +129,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mServiceIntent != null)
-        {
-            stopService(mServiceIntent);
-            Log.d(TAG, "onDestroy: stop floating service");
-        }
+//        if(mServiceIntent != null)
+//        {
+//            stopService(mServiceIntent);
+//            Log.d(TAG, "onDestroy: stop floating service");
+//        }
 //        AutoClickService autoClickService = ((MyApplication)this.getApplication()).getClickService();
 //        if(autoClickService != null){
 //            autoClickService.stopSelf();
